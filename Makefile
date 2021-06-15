@@ -30,7 +30,7 @@ cleanlintcache:
 
 .PHONY: lint
 lint: cleanlintcache
-	buf lint
+	# buf lint
 	golangci-lint run ./...
 
 .PHONY: tidy
