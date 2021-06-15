@@ -1,4 +1,4 @@
-PROTOGEN_IMAGE = indrasaputra/protogen:0.0.1
+PROTOGEN_IMAGE = indrasaputra/protogen:2021-06-06
 
 .PHONY: format
 format:
@@ -30,7 +30,7 @@ cleanlintcache:
 
 .PHONY: lint
 lint: cleanlintcache
-	# buf lint
+	buf lint
 	golangci-lint run ./...
 
 .PHONY: tidy
