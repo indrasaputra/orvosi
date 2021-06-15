@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package proto.indrasaputra.orvosi.v1;
+
+option go_package = "github.com/indrasaputra/orvosi/proto/indrasaputra/orvosi/v1;orvosiv1";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info : {
+    title : "Medical record API",
+    version : "1.0.0",
+    contact : {
+      name : "Indra Saputra",
+      url : "https://github.com/indrasaputra",
+    },
+    license : {
+      name : "BSD 3-Clause License",
+      url : "https://github.com/indrasaputra/orvosi/blob/main/LICENSE",
+    },
+  },
+  consumes : "application/json",
+  produces : "application/json",
+};
+
+service MedicalRecordService {
+  option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_tag) = {
+    description : "This service provides API related to medical record."
+  };
+
+  // Create a new medical record.
+  //
+  // This endpoint creates a new medical record.
+  rpc CreateMedicalRecord(CreateMedicalRecordRequest) returns (CreateMedicalRecordResponse) {
+    option (google.api.http) = {
+      post : "/v1/medical-records",
+      body : "medical_record"
+    };
+  }
+}
+
+message CreateMedicalRecordRequest {
+  MedicalRecord medical_record = 1;
+}
+
+message CreateMedicalRecordResponse {
+}
+
+message User {
+  string email = 1 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description : "User's email",
+      format : "email",
+      example : "\"admin@orvosi.health\"",
+    }
+  ];
+
+  string name = 2 [
+    (google.api.field_behavior) = OUTPUT_ONLY,
+    (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+      description : "User's name",
+      example : "\"Boaz Solossa\"",
+    }
+  ];
+}
+
+message MedicalRecord {
+  string symptom = 1 [ (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+    required : "symptom",
+    description : "A symptom of illness",
+    min_length : 1,
+    max_length : 200,
+    example : "\"maag, sakit perut, diare\"",
+  } ];
+
+  string diagnosis = 2 [ (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+    required : "diagnosis",
+    description : "A diagnosis given by doctor",
+    min_length : 1,
+    max_length : 200,
+    example : "\"dispepsia\"",
+  } ];
+
+  string therapy = 3 [ (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+    required : "therapy",
+    description : "Therapy given by doctor",
+    min_length : 1,
+    max_length : 200,
+    example : "\"pepzol 20mg 3x1\"",
+  } ];
+
+  string result = 4 [ (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_field) = {
+    description : "Result after therapy",
+    min_length : 1,
+    max_length : 200,
+    example : "\"sembuh\"",
+  } ];
+
+  google.protobuf.Timestamp created_at = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  google.protobuf.Timestamp updated_at = 6 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message MedicalRecordError {
+  MedicalRecordErrorCode error_code = 1;
+}
+
+enum MedicalRecordErrorCode {
+  // Default enum code according to
+  // https://medium.com/@akhaku/protobuf-definition-best-practices-87f281576f31.
+  UNSPECIFIED = 0;
+
+  // Unexpected behavior occured in system.
+  INTERNAL = 1;
+
+  // MedicalRecord instance is empty or nil.
+  EMPTY_MEDICAL_RECORD = 2;
+}
