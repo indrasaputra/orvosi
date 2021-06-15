@@ -1,0 +1,155 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Medical record API",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Indra Saputra",
+      "url": "https://github.com/indrasaputra"
+    },
+    "license": {
+      "name": "BSD 3-Clause License",
+      "url": "https://github.com/indrasaputra/orvosi/blob/main/LICENSE"
+    }
+  },
+  "tags": [
+    {
+      "name": "MedicalRecordService",
+      "description": "This service provides API related to medical record."
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/medical-records": {
+      "post": {
+        "summary": "Create a new medical record.",
+        "description": "This endpoint creates a new medical record.",
+        "operationId": "MedicalRecordService_CreateMedicalRecord",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateMedicalRecordResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1MedicalRecord"
+            }
+          }
+        ],
+        "tags": [
+          "MedicalRecordService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CreateMedicalRecordResponse": {
+      "type": "object"
+    },
+    "v1MedicalRecord": {
+      "type": "object",
+      "properties": {
+        "symptom": {
+          "type": "string",
+          "example": "maag, sakit perut, diare",
+          "description": "A symptom of illness",
+          "maxLength": 200,
+          "minLength": 1,
+          "required": [
+            "symptom"
+          ]
+        },
+        "diagnosis": {
+          "type": "string",
+          "example": "dispepsia",
+          "description": "A diagnosis given by doctor",
+          "maxLength": 200,
+          "minLength": 1,
+          "required": [
+            "diagnosis"
+          ]
+        },
+        "therapy": {
+          "type": "string",
+          "example": "pepzol 20mg 3x1",
+          "description": "Therapy given by doctor",
+          "maxLength": 200,
+          "minLength": 1,
+          "required": [
+            "therapy"
+          ]
+        },
+        "result": {
+          "type": "string",
+          "example": "sembuh",
+          "description": "Result after therapy",
+          "maxLength": 200,
+          "minLength": 1
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "symptom",
+        "diagnosis",
+        "therapy"
+      ]
+    }
+  }
+}
